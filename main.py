@@ -37,6 +37,10 @@ async def join(ctx: commands.Context):
 async def leave(ctx: commands.Context):
     if (ctx.author.voice and ctx.me.voice):
         if (ctx.author.voice.channel == ctx.me.voice.channel):
+            voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+            voice.stop()
+            now_playing[ctx.guild] = None
+            song_queue[ctx.guild] = []
             await ctx.voice_client.disconnect()
         else:
             embedMsg = discord.Embed(description="你必須在該語音頻道內才能使用此指令", color=embed_color)
