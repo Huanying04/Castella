@@ -3,6 +3,12 @@ from youtube_dl import YoutubeDL
 
 
 def find(url: str):
+    """
+    傳回值:\n
+        None -> 不支援或錯誤\n
+        0 -> 格式錯誤\n
+        Tuple -> [0]為stream網址、[1]為歌曲名稱、[2]為原檢測網址
+    """
     if url.startswith("https://streetvoice.com/") or url.startswith("http://streetvoice.com/"):
         s = url.split("/")
         s = list(filter(None, s))  # remove all empty string from list?

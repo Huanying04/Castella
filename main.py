@@ -78,7 +78,7 @@ async def play(ctx: commands.Context, song):
             return
 
     u_song = song_finder.find(song)
-    if u_song[0] and u_song != 0 and u_song is not None:
+    if u_song is not None and u_song != 0 and u_song[0]:
         # 如果沒有佇列的話，直接播放
         if (ctx.guild not in song_queue or not song_queue[ctx.guild]) and (ctx.guild not in now_playing or not now_playing[ctx.guild]):
             now_playing[ctx.guild] = u_song
@@ -97,12 +97,12 @@ async def play(ctx: commands.Context, song):
                 description="**[{}]({})**".format(u_song[1], song), 
                 color=embed_color)
             await ctx.send(embed=embedMsg)
-    elif u_song == 0:
-        embedMsg = discord.Embed(description="這不是正確的音樂連結", color=embed_color)
-        ctx.reply(embed=embedMsg)
     elif u_song is None:
         embedMsg = discord.Embed(description="不支援該平台", color=embed_color)
-        ctx.reply(embed=embedMsg)
+        await ctx.reply(embed=embedMsg)
+    elif u_song == 0:
+        embedMsg = discord.Embed(description="這不是正確的音樂連結", color=embed_color)
+        await ctx.reply(embed=embedMsg)
 
 @client.command(aliases=['q'])
 async def queue(ctx: commands.Context):
@@ -126,7 +126,7 @@ async def queue(ctx: commands.Context):
 
 @client.command(aliases=['np'])
 async def nowplaying(ctx: commands.Context):
-    print(song_queue)
+    #print(song_queue)  # this is for debugging
     if ctx.guild not in now_playing or now_playing[ctx.guild] is None:
         # no song is playing
         embedMsg = discord.Embed(description="沒有任何歌在播放喔", color=embed_color)
