@@ -4,7 +4,7 @@ from discord.ext import commands
 import song_finder
 import asyncio
 
-FFMPEG_OPTS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+FFMPEG_OPTS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -timeout 1000', 'options': '-vn'}
 
 client = commands.Bot(command_prefix="ca!", case_insensitive=True)
 embed_color = 0xf7bf25
@@ -80,7 +80,7 @@ async def play(ctx: commands.Context, song):
     u_song = song_finder.find(song)
     if u_song[0] and u_song != 0 and u_song is not None:
         # 如果沒有佇列的話，直接播放
-        if not song_queue and not voice.is_playing():
+        if (ctx.guild not in song_queue or not song_queue[ctx.guild]) and (ctx.guild not in now_playing or not now_playing[ctx.guild]):
             now_playing[ctx.guild] = u_song
             voice.play(discord.FFmpegPCMAudio(u_song[0], **FFMPEG_OPTS), after=lambda e: check_queue_and_play_next_if_have_next(ctx))
             print(voice.is_playing())  # for debugging?
@@ -126,6 +126,7 @@ async def queue(ctx: commands.Context):
 
 @client.command(aliases=['np'])
 async def nowplaying(ctx: commands.Context):
+    print(song_queue)
     if ctx.guild not in now_playing or now_playing[ctx.guild] is None:
         # no song is playing
         embedMsg = discord.Embed(description="沒有任何歌在播放喔", color=embed_color)
