@@ -3,6 +3,7 @@ from discord.channel import VoiceChannel
 from discord.ext import commands
 import song_finder
 import asyncio
+import math
 
 FFMPEG_OPTS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 50 -timeout 5000', 'options': '-vn'}
 
@@ -197,7 +198,7 @@ async def skip(ctx: commands.Context):
         embedMsg = discord.Embed(description="已跳過", color=embed_color)
         await ctx.send(embed=embedMsg)
     else:
-        embedMsg = discord.Embed(description="跳過所需人數: {}/{}".format(len(skip_vote[ctx.guild.id]), req), color=embed_color)
+        embedMsg = discord.Embed(description="跳過所需人數: {}/{}".format(len(skip_vote[ctx.guild.id]), math.ceil(req)), color=embed_color)
         await ctx.send(embed=embedMsg)
 
-client.run("機器人TOKEN")
+client.run("OTI2Mzk3NjE0NTM3MTc5MTM2.Yc7FAg.ccY6kfpc6moiyh-GQog500ppfUw")
