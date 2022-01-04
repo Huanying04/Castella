@@ -27,7 +27,7 @@ async def shutdown(ctx: commands.Context):
 async def join(ctx: commands.Context):
     if (ctx.author.voice):
         vc: VoiceChannel = ctx.author.voice.channel
-        if not ctx.voice_client.channel:
+        if ctx.voice_client is None:
             await vc.connect()
         else:
             await vc.move()
@@ -54,18 +54,18 @@ async def leave(ctx: commands.Context):
 
 @client.command(aliases=['p'])
 async def play(ctx: commands.Context, song):
-    if (not ctx.author.voice):
+    if (not ctx.author.voice):  # 使用者沒有在語音頻道內
         embedMsg = discord.Embed(description="你必須在語音頻道內才能使用此指令", color=embed_color)
         await ctx.reply(embed=embedMsg)
         return
 
-    if (ctx.voice_client is not None):
+    if (ctx.voice_client is not None):  # 機器人有在語音頻道內但使用者頻道不同
         if (ctx.author.voice.channel.id != ctx.voice_client.channel.id):
             embedMsg = discord.Embed(description="你必須相同的語音頻道才能使用此指令", color=embed_color)
             await ctx.reply(embed=embedMsg)
             return
     
-    if (not ctx.voice_client):
+    if (not ctx.voice_client):  # 機器人沒在語音頻道內
         vc = ctx.author.voice.channel
         await vc.connect()
     
