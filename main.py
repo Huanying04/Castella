@@ -201,4 +201,4 @@ async def skip(ctx: commands.Context):
         embedMsg = discord.Embed(description="跳過所需人數: {}/{}".format(len(skip_vote[ctx.guild.id]), math.ceil(req)), color=embed_color)
         await ctx.send(embed=embedMsg)
 
-client.run("OTI2Mzk3NjE0NTM3MTc5MTM2.Yc7FAg.xOkWeTwkAySvO-v-8ic1Wglzjl8")
+client.run(os.environ['TOKEN'])
